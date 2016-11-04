@@ -1,0 +1,19 @@
+{
+  "name": "express-webreload",
+  "version": "0.1.0",
+  "description": "Express middleware to reload clients",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src --out-dir dist --presets es2015-node"
+  },
+  "author": "orbin",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^1.5.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-es2015-node": "^6.1.1"
+  }
+}
