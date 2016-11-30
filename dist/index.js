@@ -12,6 +12,10 @@ var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
+var _micromatch = require("micromatch");
+
+var _micromatch2 = _interopRequireDefault(_micromatch);
+
 var _socket = require("socket.io");
 
 var _socket2 = _interopRequireDefault(_socket);
@@ -24,10 +28,16 @@ function webReload(options) {
   const root = options.root || "./";
   const extensions = options.extensions || ["html", "htm"];
   const index = options.index || "index.html";
+  const ignore = options.ignore || null;
 
   return function (req, res, next) {
     if (req.method === "GET" && req.accepts("html")) {
       let url = req.url;
+
+      if (ignore && (typeof ignore === "string" || Array.isArray(ignore))) {
+        if ((0, _micromatch2.default)(url, ignore).length > 0) return next();
+      }
+
       if (url === "/__webreload/index.js") {
         return res.sendFile("client.js", {
           root: __dirname

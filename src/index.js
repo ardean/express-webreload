@@ -1,6 +1,7 @@
 import fs from "fs";
 import http from "http";
 import path from "path";
+import mm from "micromatch";
 import SocketIOServer from "socket.io";
 
 function webReload(options) {
@@ -9,10 +10,19 @@ function webReload(options) {
   const root = options.root || "./";
   const extensions = options.extensions || ["html", "htm"];
   const index = options.index || "index.html";
+  const ignore = options.ignore || null;
 
   return function (req, res, next) {
     if (req.method === "GET" && req.accepts("html")) {
       let url = req.url;
+
+      if (
+        ignore &&
+        (typeof ignore === "string" || Array.isArray(ignore))
+      ) {
+        if (mm(url, ignore).length > 0) return next();
+      }
+
       if (url === "/__webreload/index.js") {
         return res.sendFile("client.js", {
           root: __dirname
